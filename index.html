@@ -159,33 +159,6 @@
       height: 16px;
       fill: #eee;
     }
-
-    .mute-btn {
-      position: absolute;
-      top: 15px;
-      left: 20px;
-      z-index: 5;
-      background: rgba(0,0,0,0.5);
-      border: none;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      color: white;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .mute-btn:hover {
-      background: rgba(255,255,255,0.1);
-    }
-
-    .mute-btn svg {
-      width: 20px;
-      height: 20px;
-      fill: white;
-    }
   </style>
 </head>
 <body>
@@ -201,13 +174,6 @@
   </audio>
 
   <div class="overlay" id="overlay">Click to enter</div>
-
-  <!-- Mute Toggle Button -->
-  <button class="mute-btn" id="mute-toggle" title="Toggle Mute">
-    <svg id="mute-icon" viewBox="0 0 24 24">
-      <path d="M3 10v4h4l5 5V5l-5 5H3z"/>
-    </svg>
-  </button>
 
   <div class="card" id="main-content" style="display: none;">
     <img class="profile-pic" src="https://i.imgur.com/RmfGTT6.png" alt="xanx profile picture" />
@@ -225,7 +191,7 @@
 
       <!-- Roblox -->
       <a class="social-button roblox" href="https://www.roblox.com/users/4967752/profile" target="_blank">
-        <img src="https://i.imgur.com/28wNQU1.png" alt="Roblox">
+        <img src="d0d21280-5838-46ab-bc16-930915298f8f.png" alt="Roblox">
         Roblox
       </a>
     </div>
@@ -246,8 +212,6 @@
     const mainContent = document.getElementById('main-content');
     const video = document.getElementById('bg-video');
     const audio = document.getElementById('bg-audio');
-    const muteToggle = document.getElementById('mute-toggle');
-    const muteIcon = document.getElementById('mute-icon');
 
     overlay.addEventListener('click', () => {
       overlay.style.display = 'none';
@@ -255,15 +219,6 @@
       video.muted = false;
       video.play();
       audio.play();
-    });
-
-    muteToggle.addEventListener('click', () => {
-      const isMuted = audio.muted;
-      audio.muted = !isMuted;
-      video.muted = !isMuted;
-      muteIcon.innerHTML = isMuted
-        ? '<path d="M3 10v4h4l5 5V5l-5 5H3z"/>'
-        : '<path d="M16.5 12c0-1.77-.77-3.36-2-4.47v8.94c1.23-1.11 2-2.7 2-4.47zM14.5 3.97v2.16c2.89 1.19 5 4.06 5 7.87s-2.11 6.68-5 7.87v2.16c4.01-1.3 7-5.02 7-10.03s-2.99-8.73-7-10.03zM3 10v4h4l5 5V5l-5 5H3z"/>';
     });
   </script>
 </body>
