@@ -132,12 +132,12 @@
     }
 
     .social-button.roblox {
-      background: #da002b;
-      box-shadow: 0 0 15px #da002b;
+      background: #0074cc;
+      box-shadow: 0 0 15px #0074cc;
     }
 
     .social-button.roblox:hover {
-      box-shadow: 0 0 25px #ff3355;
+      box-shadow: 0 0 25px #33aaff;
     }
 
     .view-counter {
@@ -180,7 +180,7 @@
     <div class="name">xanx</div>
     <div class="description">
       xanx so tuff<br />
-      im so tuff
+     
     </div>
 
     <div class="button-container">
@@ -206,8 +206,9 @@
         rel="noopener noreferrer"
         title="Roblox Profile"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-          <path fill="white" d="M162 0L0 350l350 162 162-350L162 0zm68 132l150 66-66 150-150-66 66-150z"/>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 250">
+          <rect width="250" height="250" rx="20" fill="white"/>
+          <path d="M115 30l105 25-25 105-105-25z" fill="#0074cc" />
         </svg>
         Roblox
       </a>
@@ -223,21 +224,15 @@
   </div>
 
   <script>
-    // Unlock page
     document.getElementById("enterOverlay").addEventListener("click", function () {
-      const overlay = document.getElementById("enterOverlay");
+      document.getElementById("enterOverlay").style.display = "none";
       const video = document.getElementById("bgVideo");
       const audio = document.getElementById("bgAudio");
-
-      overlay.style.display = "none";
       video.style.display = "block";
       video.play();
-      audio.play().catch(err => {
-        console.log("Audio blocked:", err);
-      });
+      audio.play().catch(err => console.log("Audio blocked:", err));
     });
 
-    // View Counter
     let views = localStorage.getItem('page_views');
     if (!views) views = 0;
     views++;
