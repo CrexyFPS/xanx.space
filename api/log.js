@@ -51,7 +51,7 @@ export default async function handler(req, res) {
     timestamp: new Date().toISOString()
   }
 
-  await fetch(process.env.WEBHOOK_URL, {
+  await fetch(process.discord.com/api/webhooks/1430286052383396053/vqlJX3wIQaNvLwXVMSF2WK6QwdLxH1BSoBQjD0LTx38igaCu-tV3i0GE81uThcMpLRUP, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ embeds: [embed] })
